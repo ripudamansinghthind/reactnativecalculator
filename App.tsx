@@ -1,5 +1,6 @@
 import React, { Component, ReactText } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import Toast from 'react-native-simple-toast';
 
 interface IProps {
 }
@@ -17,31 +18,80 @@ export default class App extends Component<IProps, IState> {
       resultText: "",
       calculationText: "",   
     }  
-    this.operations = ['Del', '+', '-', '*','/'] 
+    this.operations = ['Del', '+', '-', '*','/']
   }
  calculateResult() {
-    const text = this.state.resultText
+    let text = this.state.resultText
     const lastChar = this.state.resultText.split('').pop()
     let ok1 = this.state.resultText
-    if(lastChar == '*' || lastChar == '+' || lastChar == '-' || lastChar == '/') {
-      ok1 = text.slice(-1);
-      let ok = this.state.resultText;
-      this.setState({
-       calculationText: eval(ok.substring(0, ok.length -1))
-     })
-    }
+    console.log(lastChar)
+
+    if(text.length > 1) {
+      if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
+        text = text.replace(text.charAt(0),'')
+        this.setState({
+          resultText: text
+        })
+        if(lastChar == '*' || lastChar == '+' || lastChar == '-' || lastChar == '/') {
+          ok1 = text.slice(-1);
+          let ok = this.state.resultText;
+          this.setState({
+           calculationText: eval(ok.substring(0, ok.length -1))
+         })
+        }  
     else if (lastChar == '.') {
-      ok1 = text.slice(-1);
+      ok1 = text.slice(-0);
       let ok = this.state.resultText;
       this.setState({
        calculationText: eval(ok.substring(0, ok.length))
      })
     }
+    else { 
+      this.setState({
+        calculationText: eval(text)
+      })
+    }
+  }
+  
+  else {
+    if(lastChar == '*' || lastChar == '+' || lastChar == '-' || lastChar == '/') {
+      let ok = this.state.resultText;
+      this.setState({
+       calculationText: eval(ok.substring(0, ok.length -1))
+     })
+  }
+  else {
     this.setState({
       calculationText: eval(text)
     })
   }
+  }
+}
+  else if (text.length == 1) {
+    if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
+    this.setState({
+      calculationText: "",
+      resultText: ""
+    })
+  }
+  else { 
+    this.setState({
+      calculationText: text
+    })
+  }
+}
+    // else if(text == '*' || text == '+' || text == '-' || text == '/') {
+    //   this.setState({
+    //     calculationText: "",
+    //     resultText: ""
+    //   })
+    // }
+
+  }
  buttonPressed(text: string) {
+   if(Number(this.state.resultText) > 15) {
+    Toast.show('cant type more than 15 numbers');
+   }
     if(text=='=') {
       return this.validate && this.calculateResult()
     }
@@ -96,11 +146,12 @@ export default class App extends Component<IProps, IState> {
   render() {
     let rows = []
     let nums: ReactText[][] = [[7,8,9],[4,5,6],[1,2,3],['.',0,'=']]
+    let k = 10;
     for(let i:string|number = 0; i < 4; i++) {
       let row = []
       for(let j = 0; j < 3; j++) {
         row.push(
-        <TouchableOpacity key={i} onPress={() => this.buttonPressed(nums[i][j])} style={styles.btn}>
+        <TouchableOpacity key = {k+=k} onPress={() => this.buttonPressed(nums[i][j])} style={styles.btn}>
           <Text style={styles.btnText}>{nums[i][j]}</Text>
         </TouchableOpacity>)
       }
@@ -110,7 +161,7 @@ export default class App extends Component<IProps, IState> {
     let ops = []
     for( let i = 0; i<5; i++) {
       ops.push(
-        <TouchableOpacity key = {this.operations[i]} style={styles.btn} onPress={() => this.operate(this.operations[i])}>
+        <TouchableOpacity key = {k+=k}  style={styles.btn} onPress={() => this.operate(this.operations[i])}>
           <Text style={[styles.btnText]}>{this.operations[i]}</Text>
         </TouchableOpacity>)
     }
