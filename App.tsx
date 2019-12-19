@@ -30,15 +30,20 @@ export default class App extends Component<IProps, IState> {
     const lastChar = this.state.resultText.split('').pop()
 
     if (text.length > 1) {
-      if (text.charAt(0) === '*' || text.charAt(0) === '+' || text.charAt(0) === '-' || text.charAt(0) === '/') {
+      if (text.charAt(0) === '*' || text.charAt(0) === '+' || text.charAt(0) === '/') {
         this.setState({
           calculationText: 'invalid syntax',
           resultText: ''
         })
-      } else if (this.state.resultText.charAt(0) === '.') {
+      } else if (text.charAt(0) === '.') {
+        if(text.charAt(1) > '0' && text.charAt(1) < '9') {
+          this.setState({
+            calculationText: eval(this.state.resultText)
+          })
+        }
+      } else if (text.charAt(0) === '-') {
         this.setState({
-          calculationText: 'invalid syntax',
-          resultText: ''
+          calculationText: eval(this.state.resultText)
         })
       } else if (lastChar === '*') {
         let ok = this.state.resultText
@@ -75,6 +80,19 @@ export default class App extends Component<IProps, IState> {
           calculationText: '',
           resultText: ''
         })
+      } else if (text.charAt(0) === '.') {
+        if(text.charAt(0) === '*' || text.charAt(0) === '+' || text.charAt(0) === '-' || text.charAt(0) === '/') {
+          this.setState({
+            calculationText: 'invalid syntax',
+            resultText: ''
+          })
+        }
+        else {
+        this.setState({
+          calculationText: this.state.resultText + '0',
+          resultText: this.state.resultText + '0'
+        })
+      }
       } else {
         this.setState({
           calculationText: text
