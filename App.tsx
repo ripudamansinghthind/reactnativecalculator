@@ -11,6 +11,7 @@ interface IState {
   resultText?: string;
   calculationText?: string;
   text?: string;
+  disable?: string;
 }
 export default class App extends Component<IProps, IState> {
   operations: string[];
@@ -83,7 +84,7 @@ export default class App extends Component<IProps, IState> {
   }
 
   buttonPressed (text: string) {
-    if (this.state.resultText.length <= 29) {
+    if (this.state.resultText.length <= 50) {
       if (text === '=') {
         return this.validate && this.calculateResult()
       }
@@ -104,11 +105,12 @@ export default class App extends Component<IProps, IState> {
       }
       return true
     }
-
     this.setState({
+      calculationText: '50 characters only please',
       resultText: this.state.resultText.slice(0, -1),
-      calculationText: '29 characters only please'
+      disable: 'true'
     })
+
   }
 
   validate () {
@@ -158,7 +160,7 @@ export default class App extends Component<IProps, IState> {
       const row = []
       for (let j = 0; j < 3; j++) {
         row.push(
-          <TouchableOpacity key={k += k} onPress={() => this.buttonPressed(nums[i][j])} style={styles.btn}>
+          <TouchableOpacity disabled={false} key={k += k} onPress={() => this.buttonPressed(nums[i][j])} style={styles.btn}>
             <Text style={styles.btnText}>{nums[i][j]}</Text>
           </TouchableOpacity>
         )
