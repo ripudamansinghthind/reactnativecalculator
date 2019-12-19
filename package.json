@@ -13,6 +13,7 @@
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-easy-toast": "^1.2.0",
+    "react-native-redux-toast": "^1.0.3",
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-simple-toast": "^1.0.0",
     "react-native-web": "~0.11.7"
@@ -20,7 +21,20 @@
   "devDependencies": {
     "@types/react": "~16.9.0",
     "@types/react-native": "~0.60.23",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
     "babel-preset-expo": "~8.0.0",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "eslint-plugin-standard": "^4.0.1",
     "react-native-clean-project": "^3.3.0",
     "typescript": "~3.6.3"
   },

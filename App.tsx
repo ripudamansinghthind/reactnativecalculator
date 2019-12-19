@@ -1,5 +1,9 @@
-import React, { Component, ReactText } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+/* eslint no-eval: 0 */
+// eslint-disable-next-line no-unused-vars
+import React, { Component, ReactText } from 'react'
+import {
+  StyleSheet, View, Text, TouchableOpacity
+} from 'react-native'
 
 interface IProps {
 }
@@ -10,116 +14,106 @@ interface IState {
 }
 export default class App extends Component<IProps, IState> {
   operations: string[];
-  
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      resultText: "",
-      calculationText: "",   
-    }  
-    this.operations = ['Del', 'C', '+', '-', '*','/']
-  }
- calculateResult() {
-    let text = this.state.resultText
-    const lastChar = this.state.resultText.split('').pop()
-    let ok1 = this.state.resultText
 
-    if(text.length > 1) {
-      if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
-        this.setState({
-          calculationText: "invalid syntax",
-          resultText: ""
-        })
+  constructor (props: IProps) {
+    super(props)
+    this.state = {
+      resultText: '',
+      calculationText: ''
+    }
+    this.operations = ['Del', 'C', '+', '-', '*', '/']
   }
-  else {
-    if(this.state.resultText.charAt(0) == '.') {
-      this.setState({
-        calculationText: "invalid syntax",
-        resultText: ""
-      })
-    }
-    else {
-    if(lastChar == '*') {
-      let ok = this.state.resultText;
-      ok = String(eval(ok.substring(0, ok.length -1)) * eval(ok.substring(0, ok.length -1)))
-      this.setState({
-       calculationText: ok
-     })
-    }
-    else if(lastChar == '+') {
-      let ok = this.state.resultText;
-      ok = String(eval(ok.substring(0, ok.length -1)) + eval(ok.substring(0, ok.length -1)))
-      this.setState({
-       calculationText: ok
-     })
-    }
-    else if(lastChar == '-') {
-      let ok = this.state.resultText;
-      ok = String(eval(ok.substring(0, ok.length -1)) - eval(ok.substring(0, ok.length -1)))
-      this.setState({
-       calculationText: ok
-     })
-    }
-    else if(lastChar == '/') {
-      let ok = this.state.resultText;
-      ok = String(eval(ok.substring(0, ok.length -1)) / eval(ok.substring(0, ok.length -1)))
-      this.setState({
-       calculationText: ok
-     })
-    }
-    else {
-      this.setState({
-        calculationText: eval(text)
-      })
+
+  calculateResult () {
+    const text = this.state.resultText
+    const lastChar = this.state.resultText.split('').pop()
+
+    if (text.length > 1) {
+      if (text.charAt(0) === '*' || text.charAt(0) === '+' || text.charAt(0) === '-' || text.charAt(0) === '/') {
+        this.setState({
+          calculationText: 'invalid syntax',
+          resultText: ''
+        })
+      } else if (this.state.resultText.charAt(0) === '.') {
+        this.setState({
+          calculationText: 'invalid syntax',
+          resultText: ''
+        })
+      } else if (lastChar === '*') {
+        let ok = this.state.resultText
+        ok = String(eval(ok.substring(0, ok.length - 1)) * eval(ok.substring(0, ok.length - 1)))
+        this.setState({
+          calculationText: ok
+        })
+      } else if (lastChar === '+') {
+        let ok = this.state.resultText
+        ok = String(eval(ok.substring(0, ok.length - 1)) + eval(ok.substring(0, ok.length - 1)))
+        this.setState({
+          calculationText: ok
+        })
+      } else if (lastChar === '-') {
+        let ok = this.state.resultText
+        ok = String(eval(ok.substring(0, ok.length - 1)) - eval(ok.substring(0, ok.length - 1)))
+        this.setState({
+          calculationText: ok
+        })
+      } else if (lastChar === '/') {
+        let ok = this.state.resultText
+        ok = String(eval(ok.substring(0, ok.length - 1)) / eval(ok.substring(0, ok.length - 1)))
+        this.setState({
+          calculationText: ok
+        })
+      } else {
+        this.setState({
+          calculationText: eval(text)
+        })
+      }
+    } else if (text.length === 1) {
+      if (text.charAt(0) === '*' || text.charAt(0) === '+' || text.charAt(0) === '-' || text.charAt(0) === '/') {
+        this.setState({
+          calculationText: '',
+          resultText: ''
+        })
+      } else {
+        this.setState({
+          calculationText: text
+        })
       }
     }
   }
-}
-  else if (text.length == 1) {
-    if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
-    this.setState({
-      calculationText: "",
-      resultText: ""
-    })
-  }
-  else { 
-    this.setState({
-      calculationText: text
-    })
-  }
-}
-  }
- buttonPressed(text: string) {
-   if(this.state.resultText.length <= 29) {
-    if(text=='=') {
-      return this.validate && this.calculateResult()
+
+  buttonPressed (text: string) {
+    if (this.state.resultText.length <= 29) {
+      if (text === '=') {
+        return this.validate && this.calculateResult()
+      }
+      this.setState({
+        resultText: this.state.resultText + text
+      })
+      switch (text) {
+        case '.': {
+          const lastChar = this.state.resultText.split('').pop()
+          if (lastChar === '.') {
+            text = text.slice(-1)
+            const ok = this.state.resultText
+            this.setState({
+              resultText: ok.substring(0, ok.length)
+            })
+          }
+        }
+      }
+      return true
     }
-    this.setState({
-      resultText: this.state.resultText+text
-    })
-    switch(text) {
-      case '.':
-        const lastChar = this.state.resultText.split('').pop()
-         if(lastChar == '.') {
-           text = text.slice(-1);
-           let ok = this.state.resultText;
-           this.setState({
-            resultText: ok.substring(0, ok.length)
-          })
-         }
-    }
-    return true
-  }
-  else {
+
     this.setState({
       resultText: this.state.resultText.slice(0, -1),
-      calculationText: "29 characters only please"
+      calculationText: '29 characters only please'
     })
   }
-}
-  validate() {
+
+  validate () {
     const text = this.state.resultText
-    switch(text.slice(-1)) {
+    switch (text.slice(-1)) {
       case '+':
       case '-':
       case '*':
@@ -128,53 +122,57 @@ export default class App extends Component<IProps, IState> {
     }
     return true
   }
-  operate(operation: string) {
-    switch(operation) {
+
+  operate (operation: string) {
+    switch (operation) {
       case 'Del':
         this.setState({
           resultText: this.state.resultText.slice(0, -1)
         })
         break
       case 'C':
-        let text = this.state.resultText.split('')
         this.setState({
-          resultText: "",
-          calculationText: ""
+          resultText: '',
+          calculationText: ''
         })
         break
-        case '+':
-        case '-':
-        case '*':
-        case '/':
-          const lastChar = this.state.resultText.split('').pop()
-          if(this.operations.indexOf(lastChar) > 0) return
-          if(this.state.text == "") return
-          this.setState({
-            resultText: this.state.resultText + operation
-          })
+      case '+':
+      case '-':
+      case '*':
+      case '/': {
+        const lastChar : string = this.state.resultText.split('').pop()
+        if (this.operations.indexOf(lastChar) > 0) return
+        if (this.state.text === '') return
+        this.setState({
+          resultText: this.state.resultText + operation
+        })
+      }
     }
   }
-  render() {
-    let rows = []
-    let nums: ReactText[][] = [[7,8,9],[4,5,6],[1,2,3],['.',0,'=']]
-    let k = 10;
-    for(let i:string|number = 0; i < 4; i++) {
-      let row = []
-      for(let j = 0; j < 3; j++) {
+
+  render () {
+    const rows = []
+    const nums: ReactText[][] = [[7, 8, 9], [4, 5, 6], [1, 2, 3], ['.', 0, '=']]
+    let k = 10
+    for (let i:string|number = 0; i < 4; i++) {
+      const row = []
+      for (let j = 0; j < 3; j++) {
         row.push(
-        <TouchableOpacity key = {k+=k} onPress={() => this.buttonPressed(nums[i][j])} style={styles.btn}>
-          <Text style={styles.btnText}>{nums[i][j]}</Text>
-        </TouchableOpacity>)
+          <TouchableOpacity key={k += k} onPress={() => this.buttonPressed(nums[i][j])} style={styles.btn}>
+            <Text style={styles.btnText}>{nums[i][j]}</Text>
+          </TouchableOpacity>
+        )
       }
       rows.push(<View style={styles.row}>{row}</View>)
     }
-
-    let ops = []
-    for( let i = 0; i<6; i++) {
+    let p = 11
+    const ops = []
+    for (let i = 0; i < 6; i++) {
       ops.push(
-        <TouchableOpacity key = {k+=k}  style={styles.btn} onPress={() => this.operate(this.operations[i])}>
+        <TouchableOpacity key={p += p} style={styles.btn} onPress={() => this.operate(this.operations[i])}>
           <Text style={[styles.btnText]}>{this.operations[i]}</Text>
-        </TouchableOpacity>)
+        </TouchableOpacity>
+      )
     }
     return (
       <View style={styles.container}>
@@ -184,16 +182,16 @@ export default class App extends Component<IProps, IState> {
         <View style={styles.calculation}>
           <Text style={styles.calculationText}>{this.state.calculationText}</Text>
         </View>
-          <View style={styles.buttons}>
-            <View style={styles.numbers}>
-              {rows}
-            </View>
-            <View style ={styles.operations}>
-              {ops}
-            </View>
+        <View style={styles.buttons}>
+          <View style={styles.numbers}>
+            {rows}
+          </View>
+          <View style={styles.operations}>
+            {ops}
           </View>
         </View>
-    );
+      </View>
+    )
   }
 }
 
@@ -252,4 +250,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'space-around'
   }
-});
+})
