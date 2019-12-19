@@ -27,10 +27,18 @@ export default class App extends Component<IProps, IState> {
     if(text.length > 1) {
       if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
         this.setState({
-          calculationText: "invalid syntax"    
+          calculationText: "invalid syntax",
+          resultText: ""
         })
   }
   else {
+    if(this.state.resultText.charAt(0) == '.') {
+      this.setState({
+        calculationText: "invalid syntax",
+        resultText: ""
+      })
+    }
+    else {
     if(lastChar == '*') {
       let ok = this.state.resultText;
       ok = String(eval(ok.substring(0, ok.length -1)) * eval(ok.substring(0, ok.length -1)))
@@ -65,6 +73,7 @@ export default class App extends Component<IProps, IState> {
       })
       }
     }
+  }
 }
   else if (text.length == 1) {
     if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
@@ -83,7 +92,7 @@ export default class App extends Component<IProps, IState> {
  buttonPressed(text: string) {
    if(this.state.resultText.length <= 29) {
     if(text=='=') {
-      return this.death && this.validate && this.calculateResult()
+      return this.validate && this.calculateResult()
     }
     this.setState({
       resultText: this.state.resultText+text
@@ -118,16 +127,6 @@ export default class App extends Component<IProps, IState> {
         return false
     }
     return true
-  }
-  death() {
-    // const lastChar = this.state.resultText.slice(-2);
-    // const secondlastChar = this.state.resultText.charAt(this.state.resultText.length - 1);
-    // console.log(secondlastChar);
-    //  if(lastChar == '.' && secondlastChar == '/') {
-    //   this.state = {
-    //     calculationText: "FUCK U JACKY"  
-    //   } 
-    //  }
   }
   operate(operation: string) {
     switch(operation) {
