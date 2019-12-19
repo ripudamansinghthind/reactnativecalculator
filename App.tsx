@@ -1,6 +1,5 @@
 import React, { Component, ReactText } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import Toast from 'react-native-simple-toast';
 
 interface IProps {
 }
@@ -27,44 +26,45 @@ export default class App extends Component<IProps, IState> {
 
     if(text.length > 1) {
       if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
-        text = text.replace(text.charAt(0),'')
         this.setState({
-          resultText: text
+          calculationText: "invalid syntax"    
         })
-        if(lastChar == '*' || lastChar == '+' || lastChar == '-' || lastChar == '/') {
-          ok1 = text.slice(-1);
-          let ok = this.state.resultText;
-          this.setState({
-           calculationText: eval(ok.substring(0, ok.length -1))
-         })
-        }  
-    else if (lastChar == '.') {
-      ok1 = text.slice(-0);
+  }
+  else {
+    if(lastChar == '*') {
       let ok = this.state.resultText;
+      ok = String(eval(ok.substring(0, ok.length -1)) * eval(ok.substring(0, ok.length -1)))
       this.setState({
-       calculationText: eval(ok.substring(0, ok.length))
+       calculationText: ok
      })
     }
-    else { 
+    else if(lastChar == '+') {
+      let ok = this.state.resultText;
+      ok = String(eval(ok.substring(0, ok.length -1)) + eval(ok.substring(0, ok.length -1)))
+      this.setState({
+       calculationText: ok
+     })
+    }
+    else if(lastChar == '-') {
+      let ok = this.state.resultText;
+      ok = String(eval(ok.substring(0, ok.length -1)) - eval(ok.substring(0, ok.length -1)))
+      this.setState({
+       calculationText: ok
+     })
+    }
+    else if(lastChar == '/') {
+      let ok = this.state.resultText;
+      ok = String(eval(ok.substring(0, ok.length -1)) / eval(ok.substring(0, ok.length -1)))
+      this.setState({
+       calculationText: ok
+     })
+    }
+    else {
       this.setState({
         calculationText: eval(text)
       })
+      }
     }
-  }
-  
-  else {
-    if(lastChar == '*' || lastChar == '+' || lastChar == '-' || lastChar == '/') {
-      let ok = this.state.resultText;
-      this.setState({
-       calculationText: eval(ok.substring(0, ok.length -1))
-     })
-  }
-  else {
-    this.setState({
-      calculationText: eval(text)
-    })
-  }
-  }
 }
   else if (text.length == 1) {
     if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
@@ -81,9 +81,9 @@ export default class App extends Component<IProps, IState> {
 }
   }
  buttonPressed(text: string) {
-   if(this.state.resultText.length <= 30) {
+   if(this.state.resultText.length <= 29) {
     if(text=='=') {
-      return this.validate && this.calculateResult()
+      return this.death && this.validate && this.calculateResult()
     }
     this.setState({
       resultText: this.state.resultText+text
@@ -102,9 +102,9 @@ export default class App extends Component<IProps, IState> {
     return true
   }
   else {
-    Toast.show('only 15 numbers please');
     this.setState({
-      resultText: this.state.resultText.slice(0, -1)
+      resultText: this.state.resultText.slice(0, -1),
+      calculationText: "29 characters only please"
     })
   }
 }
@@ -118,6 +118,16 @@ export default class App extends Component<IProps, IState> {
         return false
     }
     return true
+  }
+  death() {
+    // const lastChar = this.state.resultText.slice(-2);
+    // const secondlastChar = this.state.resultText.charAt(this.state.resultText.length - 1);
+    // console.log(secondlastChar);
+    //  if(lastChar == '.' && secondlastChar == '/') {
+    //   this.state = {
+    //     calculationText: "FUCK U JACKY"  
+    //   } 
+    //  }
   }
   operate(operation: string) {
     switch(operation) {
