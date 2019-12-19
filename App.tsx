@@ -18,13 +18,12 @@ export default class App extends Component<IProps, IState> {
       resultText: "",
       calculationText: "",   
     }  
-    this.operations = ['Del', '+', '-', '*','/']
+    this.operations = ['Del', 'C', '+', '-', '*','/']
   }
  calculateResult() {
     let text = this.state.resultText
     const lastChar = this.state.resultText.split('').pop()
     let ok1 = this.state.resultText
-    console.log(lastChar)
 
     if(text.length > 1) {
       if (text.charAt(0) == '*' || text.charAt(0) == '+' || text.charAt(0) == '-' || text.charAt(0) == '/') {
@@ -80,18 +79,9 @@ export default class App extends Component<IProps, IState> {
     })
   }
 }
-    // else if(text == '*' || text == '+' || text == '-' || text == '/') {
-    //   this.setState({
-    //     calculationText: "",
-    //     resultText: ""
-    //   })
-    // }
-
   }
  buttonPressed(text: string) {
-   if(Number(this.state.resultText) > 15) {
-    Toast.show('cant type more than 15 numbers');
-   }
+   if(this.state.resultText.length <= 30) {
     if(text=='=') {
       return this.validate && this.calculateResult()
     }
@@ -101,7 +91,6 @@ export default class App extends Component<IProps, IState> {
     switch(text) {
       case '.':
         const lastChar = this.state.resultText.split('').pop()
-        console.log(lastChar)
          if(lastChar == '.') {
            text = text.slice(-1);
            let ok = this.state.resultText;
@@ -112,6 +101,13 @@ export default class App extends Component<IProps, IState> {
     }
     return true
   }
+  else {
+    Toast.show('only 15 numbers please');
+    this.setState({
+      resultText: this.state.resultText.slice(0, -1)
+    })
+  }
+}
   validate() {
     const text = this.state.resultText
     switch(text.slice(-1)) {
@@ -126,9 +122,15 @@ export default class App extends Component<IProps, IState> {
   operate(operation: string) {
     switch(operation) {
       case 'Del':
+        this.setState({
+          resultText: this.state.resultText.slice(0, -1)
+        })
+        break
+      case 'C':
         let text = this.state.resultText.split('')
         this.setState({
-          resultText: ""
+          resultText: "",
+          calculationText: ""
         })
         break
         case '+':
@@ -159,7 +161,7 @@ export default class App extends Component<IProps, IState> {
     }
 
     let ops = []
-    for( let i = 0; i<5; i++) {
+    for( let i = 0; i<6; i++) {
       ops.push(
         <TouchableOpacity key = {k+=k}  style={styles.btn} onPress={() => this.operate(this.operations[i])}>
           <Text style={[styles.btnText]}>{this.operations[i]}</Text>
